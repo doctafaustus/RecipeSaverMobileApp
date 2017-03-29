@@ -19,7 +19,11 @@
 var app = {
     // Application Constructor
     initialize: function() {
-        this.bindEvents();
+      this.bindEvents();
+      document.addEventListener("deviceready", onDeviceReady, false);
+      function onDeviceReady() {
+        window.open = cordova.InAppBrowser.open;
+      }
     },
     // Bind Event Listeners
     //
@@ -47,3 +51,5 @@ var app = {
         console.log('Received Event: ' + id);
     }
 };
+
+

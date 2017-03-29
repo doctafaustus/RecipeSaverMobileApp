@@ -48,9 +48,18 @@
         <div id="deviceready" class="blink">
             <p class="event listening">Connecting to Device</p>
             <p class="event received">Device is Ready</p>
-            <p id="test">Hello World!!</p>
+            <p>Hello World!!</p>
         </div>
     </div>
+
+
+
+		<a href="/login/google" class="social-login-link">Login with Google</a><br>
+		<a href="/login/facebook-app" class="social-login-link">Login with Facebook</a><br>
+		<a href="/login/twitter" class="social-login-link">Login with Twitter</a><br>
+		<a href="#" id="test-GET">TEST GET</a>
+
+
     <script type="text/javascript" src="cordova.js"></script>
     <script type="text/javascript" src="js/index.js"></script>
     <script type="text/javascript">
@@ -60,13 +69,54 @@
     <script type="text/javascript" src="js/recipes.js"></script>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script>
-    	console.log(recipes);
+			// Disables Phonegap proxy
+			(function() {
+		    var xhr = {};
+		    xhr.open = XMLHttpRequest.prototype.open;
+		    XMLHttpRequest.prototype.open = function(method, url) {
+	        if (url.indexOf('/proxy/') === 0){
+	          url = window.decodeURIComponent(url.substr(7));
+	        }
+	        xhr.open.apply(this, arguments);
+		    };
+			})(window);
 
-    	if (localStorage.test) {
-    		$('#test').text(localStorage.test);
-    	} else {
-    		localStorage.test = 1;
-    	}
+
+   	 	$('#test-GET').click(function(e) {
+   	 		e.preventDefault();
+				$.ajax({
+					type: 'GET',
+				  url: 'http://www.recipesaver.net',
+				  success: function(data) {
+				  	alert(data);
+				  },
+				});
+   	 	});
+
+   		$('.social-login-link').click(function(e) {
+   			e.preventDefault();
+   			var loc = $(this).attr('href');
+
+	      var win = window.open('https://www.recipesaver.net' + loc, '_blank', 'location=yes');
+	      win.addEventListener('loadstart', function() {
+	        var poller = setInterval(function() {
+	          win.executeScript(
+	            { code: "document.querySelector('#rs-id').getAttribute('data-rs-id')" },
+	            function(values) {
+	              var app_rs_id = values[0];
+	              if (app_rs_id) {
+	                clearInterval(poller);
+	                localStorage.app_rs_id = app_rs_id;
+
+	                // Close browser window
+	                win.close();
+	                alert(app_rs_id);
+	              }
+	            }
+	          );
+	        }, 100);
+	      });
+   		});
     </script>
 
 </body>
