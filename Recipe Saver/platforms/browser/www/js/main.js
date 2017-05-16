@@ -33,21 +33,21 @@ $('#test-get-recipes').click(function(e) {
 	  		//$('#recipes-target').append('<div>' + recipe.recipeName + '</div>');
 	  		$('#recipes-list').append('<li class="recipe-entry">' + recipe.recipeName + '</li>');
 	  	});
-
 	  },
 	  error: function() {
 	  	alert('There was an error');
 	  }
   });
+
 });
 
 
 
-	$('.social-login-link').click(function(e) {
-		e.preventDefault();
-		var loc = $(this).attr('href');
+$('.social-login-link').click(function(e) {
+	e.preventDefault();
+	var loc = $(this).attr('href');
 
-  var win = window.open('https://www.recipesaver.net' + loc, '_blank', 'location=yes');
+	var win = window.open('https://www.recipesaver.net' + loc, '_blank', 'location=yes');
   win.addEventListener('loadstart', function() {
     var poller = setInterval(function() {
       win.executeScript(
@@ -65,4 +65,4 @@ $('#test-get-recipes').click(function(e) {
       );
     }, 100);
   });
-	});
+});
